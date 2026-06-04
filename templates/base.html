@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заметки</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f5f0e8;
+            --paper: #fffdf7;
+            --ink: #1a1a18;
+            --ink-muted: #6b6860;
+            --accent: #c0392b;
+            --accent-light: #fdf0ef;
+            --border: #e0d8cc;
+            --tag-bg: #eee8dc;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(192,57,43,0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(192,57,43,0.03) 0%, transparent 40%);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 0 0 60px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 28px 40px;
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            background: var(--paper);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--ink);
+        }
+
+        header span {
+            font-size: 13px;
+            color: var(--ink-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 40px 24px 0;
+        }
+
+        /* ---- форма ---- */
+        .note-form {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+
+        .note-form textarea {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            background: transparent;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--ink);
+            resize: none;
+            height: 90px;
+            outline: none;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .note-form textarea:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .note-form textarea::placeholder {
+            color: var(--ink-muted);
+            font-style: italic;
+        }
+
+        .form-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-controls label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--ink-muted);
+            cursor: pointer;
+            letter-spacing: 0.03em;
+        }
+
+        .form-controls input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 15px;
+            height: 15px;
+        }
+
+        button {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 1px solid var(--ink);
+            background: var(--ink);
+            color: var(--paper);
+            padding: 9px 22px;
+            border-radius: 1px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        button:hover {
+            background: transparent;
+            color: var(--ink);
+        }
+
+        /* ---- заметки ---- */
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            border: 1px solid var(--border);
+            background: var(--border);
+        }
+
+        .note {
+            background: var(--paper);
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            transition: background 0.15s;
+        }
+
+        .note:hover {
+            background: #fffef9;
+        }
+
+        .note p {
+            font-size: 15px;
+            line-height: 1.6;
+            flex: 1;
+            color: var(--ink);
+        }
+
+        .note.important {
+            background: var(--accent-light);
+        }
+
+        .note.important:hover {
+            background: #fce8e6;
+        }
+
+        .note.important p {
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        .note.important::before {
+            content: '!';
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.4;
+            min-width: 16px;
+        }
+
+        /* ---- кнопка удалить ---- */
+        .delete-btn {
+            font-size: 11px;
+            padding: 5px 12px;
+            background: transparent;
+            color: var(--ink-muted);
+            border-color: var(--border);
+            white-space: nowrap;
+        }
+
+        .delete-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* ---- кнопка clear ---- */
+        .clear-section {
+            margin-top: 28px;
+            text-align: right;
+        }
+
+        .btn-clear {
+            background: transparent;
+            color: var(--ink-muted);
+            border-color: var(--border);
+            font-size: 12px;
+        }
+
+        .btn-clear:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* ---- пусто ---- */
+        .empty {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--ink-muted);
+            font-style: italic;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Заметки</h1>
+        <span>личный архив</span>
+    </header>
+
+    <div class="container">
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>
