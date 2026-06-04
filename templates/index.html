@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="notes-container">
+    <form method="POST" action="/add" class="note-form">
+        <textarea name="text" placeholder="Введите вашу заметку..." required></textarea>
+        <div class="form-controls">
+            <label>
+                <input type="checkbox" name="important"> Важная заметка
+            </label>
+            <button type="submit">Добавить</button>
+        </div>
+    </form>
+
+    <div class="notes-list">
+        {% for note in notes %}
+        <div class="note {% if note.important %}important{% endif %}">
+            <p>{{ note.text }}</p>
+            <form action="/delete/{{ note.id }}" method="GET">
+                <button type="submit" class="delete-btn">Удалить</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
